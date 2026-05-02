@@ -136,3 +136,23 @@ DOMAIN_SUFFIX,fullstory.com
 DOMAIN_SUFFIX,logrocket.com
 DOMAIN_SUFFIX,heap.io
 DOMAIN_SUFFIX,crazyegg.com
+
+# 追加
+DOMAIN_SUFFIX,adjust.io
+DOMAIN_SUFFIX,airbrake.io
+DOMAIN_SUFFIX,appboy.com
+DOMAIN_SUFFIX,apsalar.com
+DOMAIN_SUFFIX,bkrtx.com
+DOMAIN_SUFFIX,bluekai.com
+DOMAIN_SUFFIX,bugsense.com
+DOMAIN_SUFFIX,burstly.com
+DOMAIN_SUFFIX,chartboost.com
+DOMAIN_SUFFIX,count.ly
+DOMAIN_SUFFIX,crittercism.com
+DOMAIN_SUFFIX,inmobi.com
+DOMAIN_SUFFIX,jumptap.com
+DOMAIN_SUFFIX,localytics.com
+DOMAIN,mobile-collector.newrelic.com
+DOMAIN_SUFFIX,mobileapptracking.com
+DOMAIN_SUFFIX,tapjoy.com
+
