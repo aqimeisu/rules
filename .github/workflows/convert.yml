@@ -1,0 +1,59 @@
+name: Convert to SRS
+
+on:
+  push:
+    paths:
+      - 'privacy.list'
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install sing-box
+        run: |
+          wget https://github.com/SagerNet/sing-box/releases/download/v1.13.11/sing-box-1.13.11-linux-amd64.tar.gz
+          tar -xzf sing-box-1.13.11-linux-amd64.tar.gz
+          sudo mv sing-box-1.13.11-linux-amd64/sing-box /usr/local/bin/
+
+      - name: Convert list to json
+        run: |
+          python3 -c "
+          rules = []
+          domains = []
+          suffixes = []
+          keywords = []
+          with open('privacy.list') as f:
+              for line in f:
+                  line = line.strip()
+                  if not line or line.startswith('#'):
+                      continue
+                  if line.startswith('DOMAIN,'):
+                      domains.append(line.split(',')[1])
+                  elif line.startswith('DOMAIN_SUFFIX,'):
+                      suffixes.append(line.split(',')[1])
+                  elif line.startswith('DOMAIN_KEYWORD,'):
+                      keywords.append(line.split(',')[1])
+          rule = {}
+          if domains: rule['domain'] = domains
+          if suffixes: rule['domain_suffix'] = suffixes
+          if keywords: rule['domain_keyword'] = keywords
+          import json
+          with open('privacy.json', 'w') as f:
+              json.dump({'version': 2, 'rules': [rule]}, f)
+          "
+
+      - name: Compile to SRS
+        run: sing-box rule-set compile privacy.json -o privacy.srs
+
+      - name: Commit and push
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add privacy.srs
+          git diff --staged --quiet || git commit -m 'Auto compile privacy.srs'
+          git push
